@@ -150,6 +150,18 @@ void main(List<String> args) async {
 
   Future buildFlutterWechat(List<String> arguments) async {
     print("[INFO] 正在构建 wechat 产物");
+
+    final outputdir = arguments.firstWhere(
+        (element) => element.startsWith('--dart-define=mpflutter.outputdir='));
+    late final String outputdirValue;
+    if (outputdir.isNotEmpty) {
+      outputdirValue = outputdir.split('=')[2];
+    } else {
+      outputdirValue = "wechat";
+    }
+
+    final wechatOutDir = Directory(join('build', outputdirValue));
+
     // create wechat dir
     if (wechatOutDir.existsSync()) {
       wechatOutDir.deleteSync(recursive: true);

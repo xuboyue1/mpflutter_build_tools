@@ -117,7 +117,15 @@ Future main(List<String> arguments) async {
     try {
       await builder.buildFlutterWeb(arguments);
       await builder.buildFlutterWechat(arguments);
-      print("[INFO] 构建成功，产物在 build/wechat 目录，使用微信开发者工具导入预览、上传、发布。");
+      final outputdir = arguments.firstWhere(
+             (element) => element.startsWith('--dart-define=mpflutter.outputdir='));
+      late final String outputdirValue;
+      if (outputdir.isNotEmpty) {
+        outputdirValue = outputdir.split('=')[2];
+      } else {
+        outputdirValue = "wechat";
+      }
+      print("[INFO] 构建成功，产物在 build/$outputdir 目录，使用微信开发者工具导入预览、上传、发布。");
       await _mpflutterEventLog?.buildSuccess();
       if (arguments.contains('--debug')) {
         runSourceMapServer();
